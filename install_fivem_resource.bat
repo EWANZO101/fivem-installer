@@ -26,14 +26,31 @@ if "%DOWNLOAD_URL%"=="" (
 
 echo License authenticated successfully. Downloading the resource...
 
+:: Define destination folder for the resource
+set RESOURCE_DIR=resources\[custom]\basic_hello
+
 :: Download the resource
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%DOWNLOAD_URL%', 'resource.zip')"
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%DOWNLOAD_URL%', 'basic_hello.zip')"
+
+:: Check if the ZIP file was downloaded successfully
+if not exist basic_hello.zip (
+    echo Error: Failed to download the resource.
+    exit /b 1
+)
 
 :: Extract the downloaded resource
 echo Extracting resource...
-powershell -Command "Expand-Archive -Path resource.zip -DestinationPath fivem_resources"
+powershell -Command "Expand-Archive -Path basic_hello.zip -DestinationPath %RESOURCE_DIR%"
 
 :: Clean up the zip file
-del resource.zip
+del basic_hello.zip
 
-echo Resource installed successfully in fivem_resources\ directory.
+:: Verify if the resource folder exists
+if not exist %RESOURCE_DIR% (
+    echo Error: Failed to extract the resource.
+    exit /b 1
+)
+
+echo Resource installed successfully in %RESOURCE_DIR% directory.
+echo Please ensure this resource is added to your server.cfg file.
+pause
