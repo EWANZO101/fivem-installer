@@ -11,12 +11,13 @@ if "%LICENSE_KEY%"=="" (
     exit /b 1
 )
 
-:: API URL and authentication
-set API_URL=https://store.swiftpeakhosting.co.uk/admin/api-v1/licenses/public/download
+:: API URL and authentication details
+set API_URL=https://store.swiftpeakhosting.co.uk/api/v1/
+set BEARER_TOKEN=your_bearer_token_here
 echo Authenticating license key...
 
-:: Send POST request using PowerShell to get download URL
-for /f "delims=" %%i in ('powershell -Command "(Invoke-RestMethod -Uri '%API_URL%' -Method Post -Body '{\"license\": \"%LICENSE_KEY%\"}' -ContentType 'application/json').download_url"') do set DOWNLOAD_URL=%%i
+:: Send POST request using PowerShell with Bearer Token for authentication
+for /f "delims=" %%i in ('powershell -Command "(Invoke-RestMethod -Uri '%API_URL%' -Method Post -Headers @{Authorization='Bearer %BEARER_TOKEN%'} -Body '{\"license\": \"%LICENSE_KEY%\"}' -ContentType 'application/json').download_url"') do set DOWNLOAD_URL=%%i
 
 :: Check if we have a valid download URL
 if "%DOWNLOAD_URL%"=="" (
