@@ -12,12 +12,12 @@ set RED=%ESC%[31m
 
 :: Display a clean welcome message with color
 echo %BLUE%====================================
-echo Welcome to SwiftPeakHosting Installer
+echo Welcome to Your Script Installer
 echo ====================================
 echo.
 
 :: Prompt for License Key with better user interaction
-set /p LICENSE_KEY=%GREEN%Please enter your SwiftPeakHosting License Key:%RESET% 
+set /p LICENSE_KEY=%GREEN%Please enter your license key:%RESET% 
 if "%LICENSE_KEY%"=="" (
     echo %RED%License Key is required. Exiting.%RESET%
     exit /b 1
@@ -27,8 +27,9 @@ if "%LICENSE_KEY%"=="" (
 echo %YELLOW%Authenticating license key...%RESET%
 
 :: API URL and authentication details
-set API_URL=https://store.swiftpeakhosting.co.uk/api/v1/
-set BEARER_TOKEN=nMfCZLeeGTDUpdPckjNnnAVGt7DOmfWfgibjePJLEGzN8Cl3Buy78D9JXJYT
+set API_URL=https://your-api-url-here.com/api/v1/
+set BEARER_TOKEN=yourBearerTokenHere
+
 :: Send POST request using PowerShell with Bearer Token for authentication
 for /f "delims=" %%i in ('powershell -Command "(Invoke-RestMethod -Uri '%API_URL%' -Method Post -Headers @{Authorization='Bearer %BEARER_TOKEN%'} -Body '{\"license\": \"%LICENSE_KEY%\"}' -ContentType 'application/json').download_url"') do set DOWNLOAD_URL=%%i
 
@@ -43,7 +44,7 @@ echo %GREEN%License authenticated successfully.%RESET%
 echo %YELLOW%Downloading the resource...%RESET%
 
 :: Define destination folder for the resource
-set RESOURCE_DIR=resources\custom\basic_hello
+set RESOURCE_DIR=resources\your-script-name
 
 :: Ensure the directory exists before attempting to download or extract files
 if not exist "%RESOURCE_DIR%" (
@@ -53,20 +54,20 @@ if not exist "%RESOURCE_DIR%" (
 
 :: Download the resource from the new URL with progress indicator
 echo %BLUE%Downloading resource from:%RESET% %DOWNLOAD_URL%
-powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%DOWNLOAD_URL%', 'basic_hello.zip')"
+powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%DOWNLOAD_URL%', 'your-script.zip')"
 
 :: Check if the ZIP file was downloaded successfully
-if not exist basic_hello.zip (
+if not exist your-script.zip (
     echo %RED%Error: Failed to download the resource.%RESET%
     exit /b 1
 )
 
 :: Extract the downloaded resource
 echo %BLUE%Extracting resource to %RESOURCE_DIR%...%RESET%
-powershell -Command "Expand-Archive -Path basic_hello.zip -DestinationPath '%RESOURCE_DIR%'"
+powershell -Command "Expand-Archive -Path your-script.zip -DestinationPath '%RESOURCE_DIR%'"
 
 :: Clean up the zip file
-del basic_hello.zip
+del your-script.zip
 
 :: Verify if the resource folder exists after extraction
 if not exist "%RESOURCE_DIR%" (
