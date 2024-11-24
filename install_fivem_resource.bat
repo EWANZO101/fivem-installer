@@ -12,7 +12,7 @@ set RED=%ESC%[31m
 
 :: Display a clean welcome message with color
 echo %BLUE%====================================
-echo Welcome to Your Script Installer
+echo Swift Peak Hosting/DEV
 echo ====================================
 echo.
 
@@ -27,8 +27,8 @@ if "%LICENSE_KEY%"=="" (
 echo %YELLOW%Authenticating license key...%RESET%
 
 :: API URL and authentication details
-set API_URL=https://your-api-url-here.com/api/v1/
-set BEARER_TOKEN=yourBearerTokenHere
+set API_URL=https://swiftpeakhosting.co.uk/api/v1/
+set BEARER_TOKEN=9SORWbctrx2DZrFvVNwZuadH3or86LD7h4acnJa8SFmm9zPIQBBeXkzgpL0L 
 
 :: Send POST request using PowerShell with Bearer Token for authentication
 for /f "delims=" %%i in ('powershell -Command "(Invoke-RestMethod -Uri '%API_URL%' -Method Post -Headers @{Authorization='Bearer %BEARER_TOKEN%'} -Body '{\"license\": \"%LICENSE_KEY%\"}' -ContentType 'application/json').download_url"') do set DOWNLOAD_URL=%%i
