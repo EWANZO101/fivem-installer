@@ -13,7 +13,7 @@ if "%LICENSE_KEY%"=="" (
 
 :: API URL and authentication details
 set API_URL=https://store.swiftpeakhosting.co.uk/api/v1/
-set BEARER_TOKEN=your_bearer_token_here
+set BEARER_TOKEN=RDKHKZJ3Pn8D0QDmZCkk8kWHUSbOxQmWBYJDlVX0Y4FWpU78E76WrnLgSVUL
 echo Authenticating license key...
 
 :: Send POST request using PowerShell with Bearer Token for authentication
@@ -28,9 +28,15 @@ if "%DOWNLOAD_URL%"=="" (
 echo License authenticated successfully. Downloading the resource...
 
 :: Define destination folder for the resource
-set RESOURCE_DIR=resources\[custom]\basic_hello
+set RESOURCE_DIR=resources\custom\basic_hello
+
+:: Ensure the directory exists before attempting to download or extract files
+if not exist "%RESOURCE_DIR%" (
+    mkdir "%RESOURCE_DIR%"
+)
 
 :: Download the resource
+echo Downloading resource from: %DOWNLOAD_URL%
 powershell -Command "(New-Object System.Net.WebClient).DownloadFile('%DOWNLOAD_URL%', 'basic_hello.zip')"
 
 :: Check if the ZIP file was downloaded successfully
@@ -40,14 +46,14 @@ if not exist basic_hello.zip (
 )
 
 :: Extract the downloaded resource
-echo Extracting resource...
-powershell -Command "Expand-Archive -Path basic_hello.zip -DestinationPath %RESOURCE_DIR%"
+echo Extracting resource to %RESOURCE_DIR%...
+powershell -Command "Expand-Archive -Path basic_hello.zip -DestinationPath '%RESOURCE_DIR%'"
 
 :: Clean up the zip file
 del basic_hello.zip
 
-:: Verify if the resource folder exists
-if not exist %RESOURCE_DIR% (
+:: Verify if the resource folder exists after extraction
+if not exist "%RESOURCE_DIR%" (
     echo Error: Failed to extract the resource.
     exit /b 1
 )
@@ -55,3 +61,4 @@ if not exist %RESOURCE_DIR% (
 echo Resource installed successfully in %RESOURCE_DIR% directory.
 echo Please ensure this resource is added to your server.cfg file.
 pause
+exit /b 0
